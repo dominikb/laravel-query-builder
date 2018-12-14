@@ -2,9 +2,9 @@
 
 namespace Spatie\QueryBuilder\Filters;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class FiltersExact implements Filter
 {
@@ -12,7 +12,7 @@ class FiltersExact implements Filter
 
     public function __invoke(Builder $query, $value, string $property) : Builder
     {
-        if ($this->isRelationProperty($property)) {
+        if ($this->isRelationProperty($query, $property)) {
             return $this->withRelationConstraint($query, $value, $property);
         }
 
@@ -23,9 +23,11 @@ class FiltersExact implements Filter
         return $query->where($property, '=', $value);
     }
 
-    protected function isRelationProperty(string $property) : bool
+    protected function isRelationProperty(Builder $query, string $property) : bool
     {
-        return Str::contains($property, '.') && ! in_array($property, $this->relationConstraints);
+        return Str::contains($property, '.')
+               && ! in_array($property, $this->relationConstraints)
+               && ! Str::startsWith($property, $query->getModel()->getTable());
     }
 
     protected function withRelationConstraint(Builder $query, $value, string $property) : Builder
