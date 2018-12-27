@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\Exceptions\InvalidSortQuery;
 use Spatie\QueryBuilder\Exceptions\InvalidFieldQuery;
-use Spatie\QueryBuilder\Exceptions\InvalidFilterQuery;
 use Spatie\QueryBuilder\Exceptions\InvalidAppendQuery;
+use Spatie\QueryBuilder\Exceptions\InvalidFilterQuery;
 use Spatie\QueryBuilder\Exceptions\InvalidIncludeQuery;
 
 class QueryBuilder extends Builder

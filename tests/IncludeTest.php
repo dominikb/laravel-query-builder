@@ -173,7 +173,7 @@ class IncludeTest extends TestCase
         $models = $this->createQueryFromIncludeRequest('alias-test,other-related-models')
                        ->allowedIncludes([
                            'related-models' => 'alias-test',
-                           'other-related-models'
+                           'other-related-models',
                        ])
                        ->get();
 
