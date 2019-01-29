@@ -14,7 +14,7 @@ class Sort
     /** @var string */
     protected $property;
 
-    /** @var string  */
+    /** @var string */
     protected $columnName;
 
     public function __construct(string $property, $sortClass, ? string $columnName)
