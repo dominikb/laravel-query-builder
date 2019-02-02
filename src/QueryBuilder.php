@@ -339,6 +339,10 @@ class QueryBuilder extends Builder
 
     protected function addDefaultSorts()
     {
+        if (! $this->defaultSort) {
+            return;
+        }
+
         $this->allowedSorts = collect($this->request->sorts($this->defaultSort))
             ->map(function ($sort) {
                 if ($sort instanceof Sort) {

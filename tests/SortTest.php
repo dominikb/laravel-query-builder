@@ -33,6 +33,7 @@ class SortTest extends TestCase
     {
         $sortedModels = $this
             ->createQueryFromSortRequest('name')
+            ->defaultSort('name')
             ->get();
 
         $this->assertQueryExecuted('select * from "test_models" order by "name" asc');
@@ -44,6 +45,7 @@ class SortTest extends TestCase
     {
         $sortedModels = $this
             ->createQueryFromSortRequest('-name')
+            ->defaultSort('name')
             ->get();
 
         $this->assertQueryExecuted('select * from "test_models" order by "name" desc');
