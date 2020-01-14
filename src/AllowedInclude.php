@@ -43,8 +43,8 @@ class AllowedInclude
                     $suffix = config('query-builder.count_suffix');
 
                     $includes = $includes->merge(self::count(
-                        $alias . $suffix,
-                        $relationship . $suffix
+                        $alias.$suffix,
+                        $relationship.$suffix
                     ));
                 }
 
