@@ -31,20 +31,31 @@ class AllowedInclude
         $internalName = Str::camel($internalName ?? $name);
 
         return IncludedRelationship::getIndividualRelationshipPathsFromInclude($internalName)
-            ->flatMap(function (string $relationship) use ($name, $internalName): Collection {
-                return collect([
-                    new self($relationship, new IncludedRelationship(), $relationship === $internalName ? $internalName : null),
-                ])
-                    ->when(! Str::contains($relationship, '.'), function (Collection $includes) use ($internalName, $relationship) {
-                        return $includes->merge(self::count("{$relationship}Count", $relationship === $internalName ? "{$internalName}Count" : null));
-                    });
+            ->zip(IncludedRelationship::getIndividualRelationshipPathsFromInclude($name))
+            ->flatMap(function ($args): Collection {
+                [$relationship, $alias] = $args;
+
+                $includes = collect([
+                    new self($alias, new IncludedRelationship, $relationship),
+                ]);
+
+                if (! Str::contains($relationship, '.')) {
+                    $suffix = config('query-builder.count_suffix');
+
+                    $includes = $includes->merge(self::count(
+                        $alias . $suffix,
+                        $relationship . $suffix
+                    ));
+                }
+
+                return $includes;
             });
     }
 
     public static function count(string $name, ?string $internalName = null): Collection
     {
         return collect([
-            new static($name, new IncludedCount(), $internalName),
+            new static($name, new IncludedCount, $internalName),
         ]);
     }
 
@@ -56,6 +67,11 @@ class AllowedInclude
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getInternalName(): string
+    {
+        return $this->internalName;
     }
 
     public function isForInclude(string $includeName): bool
