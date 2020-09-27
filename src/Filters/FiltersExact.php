@@ -2,9 +2,10 @@
 
 namespace Spatie\QueryBuilder\Filters;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class FiltersExact implements Filter
 {
@@ -37,7 +38,7 @@ class FiltersExact implements Filter
         $query->where($property, '=', $value);
     }
 
-    protected function isRelationProperty(Builder $query, string $property) : bool
+    protected function isRelationProperty(Builder $query, string $property): bool
     {
         if (! Str::contains($property, '.')) {
             return false;
@@ -47,11 +48,13 @@ class FiltersExact implements Filter
             return false;
         }
 
-        if (Str::startsWith($property, $query->getModel()->getTable().'.')) {
+        $firstRelationship = Str::camel(explode('.', $property)[0]);
+
+        if (! method_exists($query->getModel(), $firstRelationship)) {
             return false;
         }
 
-        return true;
+        return is_a($query->getModel()->{$firstRelationship}(), Relation::class);
     }
 
     protected function withRelationConstraint(Builder $query, $value, string $property)
@@ -64,8 +67,8 @@ class FiltersExact implements Filter
                 ];
             });
 
-        $query->whereHas($relation, function (Builder $query) use ($value, $relation, $property) {
-            $this->relationConstraints[] = $property = $query->getModel()->getTable().'.'.$property;
+        $query->whereHas($relation, function (Builder $query) use ($value , $property) {
+            $this->relationConstraints[] = $property = $query->qualifyColumn($property);
 
             $this->__invoke($query, $value, $property);
         });

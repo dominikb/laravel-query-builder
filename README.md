@@ -1,9 +1,8 @@
 # Build Eloquent queries from API requests
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-query-builder.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-query-builder)
-[![Build Status](https://img.shields.io/circleci/project/github/spatie/laravel-query-builder/master.svg?style=flat-square)](https://circleci.com/gh/spatie/laravel-query-builder)
-[![StyleCI](https://styleci.io/repos/117567334/shield?branch=master)](https://styleci.io/repos/117567334)
-[![Quality Score](https://img.shields.io/scrutinizer/g/spatie/laravel-query-builder.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/laravel-query-builder)
+![Test Status](https://img.shields.io/github/workflow/status/spatie/laravel-query-builder/run-tests?label=tests)
+![Code Style Status](https://img.shields.io/github/workflow/status/spatie/laravel-query-builder/Check%20&%20fix%20styling?label=code%20style)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-query-builder.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-query-builder)
 
 This package allows you to filter, sort and include eloquent relations based on a request. The `QueryBuilder` used in this package extends Laravel's default Eloquent builder. This means all your favorite methods and macros are still available. Query parameter names follow the [JSON API specification](http://jsonapi.org/) as closely as possible.
@@ -22,7 +21,7 @@ $users = QueryBuilder::for(User::class)
 // all `User`s that contain the string "John" in their name
 ```
 
-[Read more about filtering features like: partial filters, exact filters, scope filters, custom filters, ignored values, default filter values, ...](https://docs.spatie.be/laravel-query-builder/v2/features/filtering/)
+[Read more about filtering features like: partial filters, exact filters, scope filters, custom filters, ignored values, default filter values, ...](https://docs.spatie.be/laravel-query-builder/v3/features/filtering/)
 
 ### Including relations based on a request: `/users?include=posts`:
 
@@ -34,7 +33,7 @@ $users = QueryBuilder::for(User::class)
 // all `User`s with their `posts` loaded
 ```
 
-[Read more about include features like: including nested relationships, including relationship count, ...](https://docs.spatie.be/laravel-query-builder/v2/features/including-relationships/)
+[Read more about include features like: including nested relationships, including relationship count, ...](https://docs.spatie.be/laravel-query-builder/v3/features/including-relationships/)
 
 ### Sorting a query based on a request: `/users?sort=id`:
 
@@ -46,7 +45,7 @@ $users = QueryBuilder::for(User::class)
 // all `User`s sorted by ascending id
 ```
 
-[Read more about sorting features like: custom sorts, sort direction, ...](https://docs.spatie.be/laravel-query-builder/v2/features/sorting/)
+[Read more about sorting features like: custom sorts, sort direction, ...](https://docs.spatie.be/laravel-query-builder/v3/features/sorting/)
 
 ### Works together nicely with existing queries:
 
@@ -59,7 +58,7 @@ $userQuery = QueryBuilder::for($query) // start from an existing Builder instanc
     ->where('score', '>', 42); // chain on any of Laravel's query builder methods
 ```
 
-### Selecting fields for a query: `/users?fields=id,email`
+### Selecting fields for a query: `/users?fields[users]=id,email`
 
 ```php
 $users = QueryBuilder::for(User::class)
@@ -69,7 +68,7 @@ $users = QueryBuilder::for(User::class)
 // the fetched `User`s will only have their id & email set
 ```
 
-[Read more about selecting fields.](https://docs.spatie.be/laravel-query-builder/v2/features/selecting-fields/)
+[Read more about selecting fields.](https://docs.spatie.be/laravel-query-builder/v3/features/selecting-fields/)
 
 ### Appending attributes to a query: `/users?append=full_name`
 
@@ -82,7 +81,17 @@ $users = QueryBuilder::for(User::class)
 // the resulting JSON will have the `getFullNameAttribute` attributes included
 ```
 
-[Read more about appending attributes.](https://docs.spatie.be/laravel-query-builder/v2/features/appending-attributes/)
+[Read more about appending attributes.](https://docs.spatie.be/laravel-query-builder/v3/features/appending-attributes/)
+
+## Support us
+
+Learn how to create a package like this one, by watching our premium video course:
+
+[![Laravel Package training](https://spatie.be/github/package-training.jpg)](https://laravelpackage.training)
+
+We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
+
+We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
 
 ## Installation
 
@@ -92,17 +101,17 @@ You can install the package via composer:
 composer require spatie/laravel-query-builder
 ```
 
-Read the installation notes on the docs site: [https://docs.spatie.be/laravel-query-builder/v2/installation-setup](https://docs.spatie.be/laravel-query-builder/v2/installation-setup/).
+Read the installation notes on the docs site: [https://docs.spatie.be/laravel-query-builder/v3/installation-setup](https://docs.spatie.be/laravel-query-builder/v3/installation-setup/).
 
 ## Documentation
 
-You can find the documentation on [https://docs.spatie.be/laravel-query-builder/v2](https://docs.spatie.be/laravel-query-builder/v2).
+You can find the documentation on [https://docs.spatie.be/laravel-query-builder/v3](https://docs.spatie.be/laravel-query-builder/v3).
 
 Find yourself stuck using the package? Found a bug? Do you have general questions or suggestions for improving the media library? Feel free to [create an issue on GitHub](https://github.com/spatie/laravel-query-builder/issues), we'll try to address it as soon as possible.
 
 If you've found a bug regarding security please mail [freek@spatie.be](mailto:freek@spatie.be) instead of using the issue tracker.
 
-### Upgrading from v1 to v2
+### Upgrading
 
 Please see [UPGRADING.md](UPGRADING.md) for details.
 
@@ -124,27 +133,11 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 If you discover any security related issues, please email freek@spatie.be instead of using the issue tracker.
 
-## Postcardware
-
-You're free to use this package, but if it makes it to your production environment we highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using.
-
-Our address is: Spatie, Samberstraat 69D, 2060 Antwerp, Belgium.
-
-We publish all received postcards [on our company website](https://spatie.be/en/opensource/postcards).
-
 ## Credits
 
 - [Alex Vanderbist](https://github.com/AlexVanderbist)
 - [All Contributors](../../contributors)
 
-## Support us
-
-Spatie is a webdesign agency based in Antwerp, Belgium. You'll find an overview of all our open source projects [on our website](https://spatie.be/opensource).
-
-Does your business depend on our contributions? Reach out and support us on [Patreon](https://www.patreon.com/spatie).
-All pledges will be dedicated to allocating workforce on maintenance and new awesome stuff.
-
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
-

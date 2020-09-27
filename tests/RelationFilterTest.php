@@ -2,10 +2,10 @@
 
 namespace Spatie\QueryBuilder\Tests;
 
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Spatie\QueryBuilder\QueryBuilder;
+use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\Tests\TestClasses\Models\TestModel;
 
 class RelationFilterTest extends TestCase
@@ -96,11 +96,11 @@ class RelationFilterTest extends TestCase
     /** @test */
     public function it_can_filter_results_based_on_the_existence_of_a_property_in_an_array()
     {
-        $testModel = TestModel::whereIn('id', [1, 2])->get();
+        $testModels = TestModel::whereIn('id', [1, 2])->get();
 
         $results = $this
             ->createQueryFromFilterRequest([
-                'related-models.id' => $testModel->map(function ($model) {
+                'related-models.id' => $testModels->map(function ($model) {
                     return $model->relatedModels->pluck('id');
                 })->flatten()->all(),
             ])
@@ -151,7 +151,7 @@ class RelationFilterTest extends TestCase
             ->allowedFilters(AllowedFilter::exact('related-models.name', null, $addRelationConstraint))
             ->toSql();
 
-        $this->assertStringContainsString('"related-models"."name" = ', $sql);
+        $this->assertStringContainsString('`related-models`.`name` = ', $sql);
     }
 
     /** @test */
@@ -166,7 +166,7 @@ class RelationFilterTest extends TestCase
             ->allowedFilters(AllowedFilter::partial('related-models.name', null, $addRelationConstraint))
             ->toSql();
 
-        $this->assertStringContainsString('LOWER("related-models"."name") LIKE ?', $sql);
+        $this->assertStringContainsString('LOWER(`related-models`.`name`) LIKE ?', $sql);
     }
 
     protected function createQueryFromFilterRequest(array $filters): QueryBuilder

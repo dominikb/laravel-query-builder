@@ -2,6 +2,76 @@
 
 All notable changes to `laravel-query-builder` will be documented in this file
 
+## 3.2.2 - 2020-09-09
+
+- Revert changes from v3.2.1 to `AllowedFilter::filter()`
+
+## 3.2.1 - 2020-09-09
+
+- Fix filtering associative arrays (#488)
+- AllowedFilter::filter() takes a `Illuminate\Database\Eloquent\Builder` instead of a QueryBuilder instance
+
+## 3.2.0 - 2020-09-08
+
+- add support for Laravel 8
+
+## 3.1.0 - 2020-08-18
+
+- add individual array delimiters for includes, filters, appends and sorts
+- ensure relations queried using the exact filter are actual relations on the model
+
+## 3.0.0 - 2020-08-18
+
+New major version. Please read the [UPGRADING](UPGRADING.md) guide _before_ upgrading.
+
+- `Spatie\QueryBuilder\QueryBuilder` class no longer extends Laravel's `Illuminate\Database\Eloquent\Builder`
+
+## 2.8.2 - 2020-05-25
+
+- fix scope filters that are added via macros (e.g. `onlyTrashed`) (#469)
+
+## 2.8.1 - 2020-03-20
+
+- make service provider deferrable (#381)
+
+## 2.8.0 - 2020-03-02
+
+- add support for Laravel 7
+
+## 2.7.2 - 2020-02-26
+
+- small fix for lumen (#436)
+
+## 2.7.1 - 2020-02-26
+
+- small fix for lumen in service provider
+
+## 2.7.0 - 2020-02-12
+
+- add support for model binding in scope filter parameters (#415)
+
+## 2.6.1 - 2020-02-11
+
+- fix alias for multiple allowed includes (#414)
+
+## 2.6.0 - 2020-02-10
+
+- add `FiltersTrashed` for filtering soft-deleted models
+- add `FiltersCallback` for filtering using a callback
+
+## 2.5.1 - 2020-01-22
+
+- fix dealing with empty or `null` includes (#395)
+- fix passing an associative array of scope filter values (#387)
+
+## 2.5.0 - 2020-01-09
+
+- add `defaultDirection`
+
+## 2.4.0 - 2020-01-04
+
+- add support for a custom filter delimiter (#369)
+
 ## 2.3.0 - 2019-10-08
 
 - resolve `QueryBuilderRequest` from service container

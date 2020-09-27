@@ -2,11 +2,11 @@
 
 namespace Spatie\QueryBuilder;
 
-use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Spatie\QueryBuilder\Includes\IncludedCount;
-use Spatie\QueryBuilder\Includes\IncludeInterface;
 use Spatie\QueryBuilder\Includes\IncludedRelationship;
+use Spatie\QueryBuilder\Includes\IncludeInterface;
 
 class AllowedInclude
 {
@@ -31,13 +31,24 @@ class AllowedInclude
         $internalName = Str::camel($internalName ?? $name);
 
         return IncludedRelationship::getIndividualRelationshipPathsFromInclude($internalName)
-            ->flatMap(function (string $relationship) use ($name, $internalName): Collection {
-                return collect([
-                    new self($relationship, new IncludedRelationship(), $relationship === $internalName ? $internalName : null),
-                ])
-                    ->when(! Str::contains($relationship, '.'), function (Collection $includes) use ($internalName, $relationship) {
-                        return $includes->merge(self::count("{$relationship}Count", $relationship === $internalName ? "{$internalName}Count" : null));
-                    });
+            ->zip(IncludedRelationship::getIndividualRelationshipPathsFromInclude($name))
+            ->flatMap(function ($args): Collection {
+                [$relationship, $alias] = $args;
+
+                $includes = collect([
+                    new self($alias, new IncludedRelationship, $relationship),
+                ]);
+
+                if (! Str::contains($relationship, '.')) {
+                    $suffix = config('query-builder.count_suffix');
+
+                    $includes = $includes->merge(self::count(
+                        $alias.$suffix,
+                        $relationship.$suffix
+                    ));
+                }
+
+                return $includes;
             });
     }
 
@@ -50,7 +61,13 @@ class AllowedInclude
 
     public function include(QueryBuilder $query): void
     {
-        ($this->includeClass)($query, $this->internalName);
+        if (property_exists($this->includeClass, 'getRequestedFieldsForRelatedTable')) {
+            $this->includeClass->getRequestedFieldsForRelatedTable = function (...$args) use ($query) {
+                return $query->getRequestedFieldsForRelatedTable(...$args);
+            };
+        }
+
+        ($this->includeClass)($query->getEloquentBuilder(), $this->internalName);
     }
 
     public function getName(): string

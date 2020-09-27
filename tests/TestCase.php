@@ -2,15 +2,18 @@
 
 namespace Spatie\QueryBuilder\Tests;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Foundation\Application;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Foundation\Application;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Spatie\QueryBuilder\QueryBuilderServiceProvider;
 
 class TestCase extends Orchestra
 {
+    use DatabaseMigrations;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -62,6 +65,7 @@ class TestCase extends Orchestra
             $table->increments('id');
             $table->string('test_model_id');
             $table->integer('related_through_pivot_model_id');
+            $table->string('location')->nullable();
         });
 
         $app['db']->connection()->getSchemaBuilder()->create('related_through_pivot_models', function (Blueprint $table) {
